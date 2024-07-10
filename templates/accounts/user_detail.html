@@ -1,0 +1,30 @@
+{% extends "_layout_main.html" %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"> Meu Perfil</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <p>
+            <a href="{% url 'account_edit_perfil' pk=user.pk %}" class="btn btn-primary btn-sm"> Editar Perfil</a>
+        </p>
+
+        <p> 
+            <h5> Email: {{user.email}} </h5>
+        </p>
+        <h5> Enquetes que voce votou </h5>
+        <ol>
+            {% for item in questions_voted %}
+                <li>{{item.question.question_text}}</li>
+            {% empty%}
+                <li><h5>Voce ainda nao votou em nehuma enquete</h5></li>
+            {% endfor %}
+        </ol>
+    </div>
+
+
+{% endblock %}

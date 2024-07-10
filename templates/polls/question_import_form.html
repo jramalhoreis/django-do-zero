@@ -1,0 +1,23 @@
+{% extends "_layout_main.html" %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"> Importacao de Perguntas</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="btn btn-primary"> Importar</button>
+            <p> object {{object}} </p>
+        </form>
+
+
+    </div>
+
+
+{% endblock %}

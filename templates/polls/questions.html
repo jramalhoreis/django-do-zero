@@ -1,0 +1,99 @@
+
+{% extends "_layout_main.html" %}
+
+
+{% block header_title %} Minhas Enquetes {% endblock %}
+
+{% block content %}
+
+    <h1> Minhas Enquetes </h1>
+
+    <a href="{% url 'question_create_view' %}" class="btn btn-lg btn-primary font-weight-bold mb-5"> 
+        Nova Pergunta 
+    </a>
+
+    {% if user.is_authenticated %}
+        &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'questions_export_csv' %}" class="btn btn-lg btn-secondary font-weight-bold mb-5"> 
+            Export To CSV 
+        </a>
+    {% endif %}
+    
+    {% if all_questions %}
+        <p>
+            <form action="">
+                <select name="categoria" id="categoria">
+                    <option value=""> Todas as Categorias </option>
+                    {% for cat in all_categorias %}
+                        <option value="{{cat}}" {% if cat == categoria %} selected {% endif %}>
+                            {{cat|title}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </p>
+    {% endif %}
+
+    {% if categoria %}
+        <h5>Categoria: {{categoria|title}}
+    {% endif %}
+
+    <h1> {{titulo}}</h1>
+
+    {% for question in all_questions %}
+        {% if user.is_authenticated %}
+            <p> 
+                {{question.id}}| {{question.pub_date | date:'Y-m-d'}} | {{question.question_text}} |
+                <a href="{% url 'question_detail' pk=question.id %}" class="link-secundary"> Visualizar</a> |
+                {% if not question.choice_set.all %}
+                    <span class="badge bg-danger"> Sem Alternativas </span>
+                {% endif %}
+
+            
+                <a href="{% url 'question_update_view' pk=question.id %}" class="link-secundary"> Update View</a> |
+                <a href="{% url 'question_update' question.id %}" class="link-secundary">  Update Function</a> |
+                <a href="{% url 'question_delete_view' pk=question.id %}" class="link-secundary"> Delete View</a> |
+                <a href="{% url 'question_remove' question.id %}" class="link-secundary">  Delete Function</a> |
+            {% else %}
+                {% if question.choice_set.all %}
+                    {{question.id}}| {{question.pub_date | date:'Y-m-d'}} | {{question.question_text}} |
+                    <a href="{% url 'question_detail' pk=question.id %}" class="link-secundary"> Visualizar</a> |
+                                    
+                {% endif %}
+            {% endif %}
+
+        </p>
+
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block javascript %}
+    {# Bootstrap JavaScript #}
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        crossorigin="anonymous">
+    </script>
+   
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", ()=>{
+            const selectElement = document.querySelector('#categoria')
+            selectElement.addEventListener("change", (event) =>{
+                let selected = selectElement.value;
+                
+                if (selected == "") {
+                    window.location.href = "{% url 'index' %}";
+                }
+                else {
+                    window.location.href = `{% url 'index' %}${selected}`;
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+
+
+
+

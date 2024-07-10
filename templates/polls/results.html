@@ -1,0 +1,47 @@
+{% extends "_layout_main.html" %}
+
+
+{% block header_title %} Minhas Enquetes {% endblock %}
+
+{% block content %}
+
+    <h1> {{question.question_text}} </h1>
+    <h1> Total de Votos:{{votes.0.total_votes}} </h1>
+
+    {% comment %}
+    <ul>
+        {% for choice in question.choice_set.all() %}
+            <li> {{choice.choice_text}} -- {{choice.votes}} vote {{choice.votes | pluralize }} </li>
+        {% endfor %}
+    </ul> 
+    <a href="{% url 'polls:detail' question_id %}" > Vote Again? </a>
+    {% endcomment %}
+
+    <ul class="list-unstyled">
+        {% for choice in votes %}
+            <li> 
+                {{choice.choice_text}} -- {{choice.votes}} vote {{choice.votes | pluralize }} 
+                <div class="progress" style="height:30px">
+                    <div
+                        class="progress-bar h6"
+                        role="progressbar"
+                        style="width:{{choice.percentage|floatformat:0}}%; height:30px;"
+                        aria-valuenow="{{choice.percentage|floatformat:0}}"
+                        aria-valuemin = "0"
+                        aria-valuemx = "100">
+                        {{choice.percentage}}%
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        <br/>
+        <br/>
+
+        <a href="{% url 'question_detail' pk=question.id %}" > Votar Novamente? </a>
+    </ul> 
+    
+    
+    
+
+    
+{% endblock %}

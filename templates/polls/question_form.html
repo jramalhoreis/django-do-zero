@@ -1,0 +1,39 @@
+{% extends "_layout_main.html" %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"> {{form_title}}</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="btn btn-primary"> Salvar</button>
+            <p> object {{object}} </p>
+        </form>
+
+        {% if object %}
+            <h3>Alternativas da Pergunta</h3>
+            <a href="{% url 'choice_add' pk=object.id %}" class="btn btn-primary mb-5"> + Incluir Alternativa </a>
+
+            <ol>
+                {% for choice in object.choice_set.all %}
+                    <li>
+                        {{choice.choice_text}} &nbsp;
+                        <a href="{% url 'choice_edit' pk=choice.id %}" class="link-secundary"> Editar </a> |
+                        <a href="{% url 'choice_delete' pk=choice.id %}" class="link-secundary"> Excluir </a>
+                    </li>
+                {% empty%}
+                    <li> Não Existem Alternativas para a Pergunta</li>
+                {% endfor %}
+            </ol>
+
+        {% endif %}
+    </div>
+
+
+{% endblock %}

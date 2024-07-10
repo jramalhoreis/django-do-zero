@@ -1,0 +1,12 @@
+
+{% for message in messages %}
+
+    <div class="containes-fluid p-0">
+        <div class="alert alert-{{messages.tags}} alert-dismissible " role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" arial-label="Close">
+            </button>
+        </div>
+    </div>
+
+{% endfor %}

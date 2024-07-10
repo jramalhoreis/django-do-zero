@@ -1,0 +1,109 @@
+{% extends "_layout_main.html" %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"> Pergunta</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <br>
+        {% if question.author %}
+            <span> Author: {{question.author.username}} </span>
+        {% else %}
+            <span> Author: Anonimo </span>
+            <br>
+        {% endif %}
+       
+        {% if question.categoria %}
+            <span> Categoria: {{question.categoria}} </span>  
+            <br>          
+        {% endif %}
+       
+        
+
+        <p>
+            {{question.question_text}}
+            <a href="{% url 'question_update_view' pk=question.id %}" class="link-secundary">
+                Editar
+            </a>
+            &nbsp 
+            <a href="{% url 'question_delete_view' pk=question.id %}" class="link-secundary">
+                Excluir
+            </a>
+        </p>
+
+        <p>  Data Publicacao: {{question.pub_date}}  </p>
+        <p>  Data Encerramento: {{question.end_date}}  Expired:{{expired}}</p>
+
+        <p>
+            <form action="{% url 'question_send' question_id=question.id %}" method="POST">
+                {% csrf_token %}
+                <label for="email">Compartilhar</label>
+                <input type="text" id="email" name="email" placeholder="Informe o Email" value="">
+                <button type="submit" class="btn btn-warning">Enviar</button>
+            </form>
+        </p>
+
+
+
+        {#----- comentado para inserir a votacao --------#}
+        {% comment %}
+         
+        {% for choice in question.choice_set.all %}
+            <p> {{choice.id}} - {{choice.choice_text}} </p>
+
+        {% empty %}
+            <p> Nao há alternativas cadastrada </p>
+        {% endfor %}
+        {% endcomment %}
+
+        {% if total_votes %}
+            <h6 class="fw-bold"> Total de Votos: {{total_votes}} </h6>
+        {% endif %}
+
+        {% if expired %}
+            <h1 class="text-danger"> Enquete Encerrada </h1>
+
+            <a href="{% url 'polls_results' question_id=question.id %}" class="link-secondary">
+                Ver Resultados
+            </a>
+
+        {% else %}
+            <form action="{% url 'poll_vote' question_id=question.id %}" method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>
+                        <h1> {{question.question_text}} </h1>
+                        {% for choice in question.choice_set.all %}
+                            <input
+                                type="radio" name="choice" id="choice{{forloop.counter}}"
+                                class="form-check-input" value="{{choice.id}}"
+                            >
+
+                            <label class="form-check-input" for="choice{{forloop.counter}}" >
+                                {{choice.choice_text}}
+                            </label>
+                            <br>
+                        {% empty %}
+                            <h5> Não Há Alternativas Cadastradas </h5>
+                        {% endfor %}
+                    </legend>
+                </fieldset>
+
+                {% if question.choice_set.all %}
+                    <input type="submit" class="btn btn-primary btn-lg" value="Votar">
+                {% endif %}
+                    
+
+
+
+            <form>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

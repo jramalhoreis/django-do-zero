@@ -1,0 +1,38 @@
+{% extends "_layout_main.html" %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"> Sobre Nos</h5>
+        </div>
+        <div class="card-body">
+            <p>
+                Somos ...
+            </p>
+    
+        </div>
+    </div>
+
+    {% comment %}
+    <div class="card-body">
+        <p>
+            {{question.question_text}}
+            <a href="{% url 'question_update_view' pk=question.id %}" class="link-secundary">
+                Editar
+            </a>
+            &nbsp 
+            <a href="{% url 'question_delete_view' pk=question.id %}" class="link-secundary">
+                Excluir
+            </a>
+        </p>
+
+        <p>
+            Data Publicacao: {{question.pub_date}}
+        </p>
+
+    </div>
+    {% endcomment %}
+
+
+{% endblock %}
